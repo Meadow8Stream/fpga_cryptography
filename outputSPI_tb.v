@@ -1,47 +1,43 @@
 //-----------------------------------------------------------------------------
 //
-// Title       : outputSPI
+// Title       : outputSPI_tb
 // Author      : Caleb Ellington
 //
 //-----------------------------------------------------------------------------
 // 		
-// Purpose: To take Hash Table output and turn it into an SPI signal
-// Specifics: 
-//	Data line output
-// 	Enable line to say when talking
-//	Send clock to inplement symmetric clocks
+// Purpose: To test outputSPI
+// 		Specifics: send 2+ bytes one after the other to observe output
 //
 //-----------------------------------------------------------------------------
 `timescale 1 ns / 1 ps
 
-//{module {outputSPI}}
-module outputSPI ();
-input in[7:0];
-input en;
-input clk;
-output out;
-output en_out;
-output clk_out;
+module outputSPI_tb;
+reg clk, en;
+reg in[7:0];
 
-	reg sr[7:0];					// index 0 = msb
+wire [3:0]out
+wire clk_out, en_out;
+
+outputSPI outputTest (
+.clk (clk)
+.en (en)
+.in (in)
+.out (out)
+.clk_out (clk_out)
+.en_out (en_out)
+);				
+
+always
+	#10 clk = ~clk;
+	#5 en <= 1'b1;
+	#1 in <= 8'b00000000;
+	#1 in <= 8'b00000001;
+	#1 in <= 8'b00000010;
+	#1 in <= 8'b00000011;
 	
-always(posedge clk)
-	begin
-		if (en) 
-			begin
-				sr <= in;
-				
-				// create and send sync'ed clock
-				$10 clk_out <= clk;
-				
-				// send enable
-				en_out <= en;	
-				// construct signal
-				out <= sr;
-			end
-			else
-			begin
-				sr <= 0;
-			end
+	initial begin
+		$display("\t\ttime,\tclk,\ten,\tin,\tout"); 
+		$monitor("%d,\t%b,\t%b,\t%b,\t%d",$time, clk,en,in,out);
 	end
+
 endmodule
