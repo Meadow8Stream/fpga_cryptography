@@ -13,7 +13,7 @@
 
 module outputSPI_tb;
 reg clk, en;
-reg in[7:0];
+reg [7:0]in;
 
 wire [3:0]out
 wire clk_out, en_out;
