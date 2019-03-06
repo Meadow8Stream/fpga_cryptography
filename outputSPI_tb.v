@@ -18,7 +18,7 @@ reg in[7:0];
 wire [3:0]out
 wire clk_out, en_out;
 
-outputSPI outputTest (
+outputSPI UUT (
 .clk (clk)
 .en (en)
 .in (in)
