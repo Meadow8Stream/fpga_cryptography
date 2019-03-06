@@ -29,20 +29,21 @@ output clk_out;
 always(posedge clk)
 	begin
 		if (en) 
-			begin
-				sr <= in;
-				
-				// create and send sync'ed clock
-				$10 clk_out <= clk;
-				
-				// send enable
-				en_out <= 1'b1;	
-				// construct signal
-				out <= sr;
-			end
-			else
-			begin
-				sr <= 0;
-			end
+		begin
+			sr <= in;
+
+			// create and send sync'ed clock
+			$10 clk_out <= clk;
+
+			// send enable
+			en_out <= 1'b1;	
+			
+			// construct signal
+			out <= sr;
+		end
+		else
+		begin
+			sr <= 0;
+		end
 	end
 endmodule
