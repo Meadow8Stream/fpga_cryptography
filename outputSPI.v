@@ -1,13 +1,22 @@
-// Serial Parallel Interface Verilog Implementation
-// Caleb Ellington
+//-----------------------------------------------------------------------------
 //
+// Title       : outputSPI
+// Design      : outputSPI
+// Author      : Caleb Ellington
+//
+//-----------------------------------------------------------------------------
+// 		
 // Purpose: To take Hash Table output and turn it into an SPI signal
 // Specifics: 
 //	Data line output
 // 	Enable line to say when talking
 //	Send clock to inplement symmetric clocks
+//
+//-----------------------------------------------------------------------------
+`timescale 1 ns / 1 ps
 
-module outputSPI (in, out, en, clk);
+//{module {outputSPI}}
+module outputSPI ();
 input in[7:0];
 input en;
 input clk;
@@ -22,9 +31,12 @@ always(posedge clk)
 		if (en) 
 			begin
 				sr <= in;
-				$10 clk <= ~clk;
+				
+				// create and send sync'ed clock
 				$10 clk_out <= clk;
 				
+				// send enable
+				en_out <= 1'b1;	
 				// construct signal
 				out <= sr;
 			end
