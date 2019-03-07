@@ -15,42 +15,73 @@
 `timescale 1 ns / 1 ps
 
 //{module {outputSPI}}
-module outputSPI (in, en, clk, out, en_out, clk_out);
-input in[7:0];
-input en;
-input clk;
-output reg out;
-output reg en_out;
-output reg clk_out;
-
-reg sr[7:0];					// index 7 = msb
+module outputSPI (in, rst, clk, out, en_out, clk_out);
+	input [7:0] in;
+	input rst;
+	input clk;
+	output reg out;
+	output reg en_out;
+	output reg clk_out;
 	
-always@(posedge clk)
+	// internal variables
+	reg [7:0] sr;					// index 7 = msb	  
+	integer i;
+	integer counter;
+	
+	// initialize variables
+	counter = 0;
+	assign clk_out = clk;
+	
+	always@(posedge clk, rst)
 	begin
-		if (en) 
+		clk_out <= clk;
+		
+		// pull out down
+		out <= 1'b0;
+		sr <= 8'b00000000;
+		
+		if (~rst) 
+		begin
+			counter <= 1'b0;
+			out <= 1'b0;   
+			en_out <= 1'b0;
+			
+		end
+		
+		else	
 		begin
 			sr <= in;
 
-			// create and send sync'ed clock
-			#10 clk_out <= clk;
-
 			// send enable
-			en_out <= en;	
+			en_out <= 1'b1;	
 			
 			// construct signal
-			#1 out <= sr[0];
-			#1 out <= sr[1];
-			#1 out <= sr[2];
-			#1 out <= sr[3];
-			#1 out <= sr[4];
-			#1 out <= sr[5];
-			#1 out <= sr[6];
-			#1 out <= sr[7];
+			if (counter == 0) begin    
+				out <= sr[0];
+				counter <= counter + 1;
+			end	else if (counter == 1) begin	
+				out <= sr[1];
+				counter <= counter + 1;
+			end else if (counter == 2) begin
+				out <= sr[2];
+				counter <= counter + 1;	 
+			end else if (counter == 3) begin
+				out <= sr[3];
+				counter <= counter + 1;
+			end	else if (counter == 4) begin
+				out <= sr[4];
+				counter <= counter + 1;
+			end else if (counter == 5) begin
+				out <= sr[5];
+				counter <= counter + 1;
+			end else if (counter == 6) begin
+				out <= sr[6];
+				counter <= counter + 1;
+			end else if (counter == 7) begin
+				out <= sr[7];
+				counter <= 0;
+			end
 			
-		end
-		else
-		begin
-			sr <= 8'b00000000;
-		end
+		end	 
 	end
 endmodule
