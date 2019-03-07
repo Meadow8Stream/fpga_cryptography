@@ -60,37 +60,64 @@ module outputSPI (in, rst, clk, out, en_out, clk_out);
 			//			    sending a 0 is low for one clock cycle, high for one clock cycle.
 			if (counter == 0) begin    
 				counter <= counter + 1;
-				if (sr[0])
+				if (sr[0]) begin
 					sendOne(clk, rst);
-				else
+				end else begin
 					sendZero(clk, rst);
 				end
 			end else if (counter == 1) begin	
-				out <= sr[1];
 				counter <= counter + 1;
+				if (sr[1]) begin
+					sendOne(clk, rst);
+				end else begin
+					sendZero(clk, rst);
+				end
 			end else if (counter == 2) begin
-				out <= sr[2];
-				counter <= counter + 1;	 
+				counter <= counter + 1;	
+				if(sr[2]) begin
+					sendOne(clk, rst);
+				end else begin
+					sendZero(clk, rst);
+				end
 			end else if (counter == 3) begin
-				out <= sr[3];
 				counter <= counter + 1;
+				if(sr[3]) begin
+					sendOne(clk, rst);
+				end else begin
+					sendZero(clk, rst);
+				end
 			end else if (counter == 4) begin
-				out <= sr[4];
 				counter <= counter + 1;
+				if(sr[4]) begin
+					sendOne(clk, rst);
+				end else begin
+					sendZero(clk, rst);
+				end
 			end else if (counter == 5) begin
-				out <= sr[5];
 				counter <= counter + 1;
+				if(sr[5]) begin
+					sendOne(clk, rst);
+				end else begin
+					sendZero(clk, rst);
+				end
 			end else if (counter == 6) begin
-				out <= sr[6];
 				counter <= counter + 1;
+				if(sr[6]) begin
+					sendOne(clk, rst);
+				end else begin
+					sendZero(clk, rst);
+				end
 			end else if (counter == 7) begin
-				out <= sr[7];
 				counter <= 0;
+				if(sr[7]) begin
+					sendOne(clk, rst);
+				end else begin
+					sendZero(clk, rst);
+				end
 			end
 			
 		end	 
 	end
-endmodule
 
 task sendOne;
 input clk;
@@ -121,3 +148,5 @@ always@(posedge clk)
 		out <= ~clk_zero;
 	end
 endtask
+
+endmodule
