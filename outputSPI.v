@@ -90,9 +90,30 @@ endmodule
 
 task sendOne;
 input clk;
-	
+input rst;
+reg clk_one;
+
+always@(posedge clk)
+	begin
+	if (~rst)
+		clk_one <= 1'b0;
+	else begin
+		clk_one = ~clk_one;
+		out <= clk_one;
+	end	
 endtask
 
 task sendZero
-input clk;	
+input clk;
+input rst;
+reg clk_zero;
+
+always@(posedge clk)
+	begin
+	if (~rst)
+		clk_zero <= 1'b0;
+	else begin
+		clk_zero = ~clk_zero
+		out <= ~clk_zero;
+	end
 endtask
