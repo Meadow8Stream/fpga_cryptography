@@ -61,58 +61,58 @@ module outputSPI (in, rst, clk, out, en_out, clk_out);
 			if (counter == 0) begin    
 				counter <= counter + 1;
 				if (sr[0]) begin
-					sendOne(clk, rst);
+					sendOne(clk_out, rst);
 				end else begin
-					sendZero(clk, rst);
+					sendZero(clk_out, rst);
 				end
 			end else if (counter == 1) begin	
 				counter <= counter + 1;
 				if (sr[1]) begin
-					sendOne(clk, rst);
+					sendOne(clk_out, rst);
 				end else begin
-					sendZero(clk, rst);
+					sendZero(clk_out, rst);
 				end
 			end else if (counter == 2) begin
 				counter <= counter + 1;	
 				if(sr[2]) begin
-					sendOne(clk, rst);
+					sendOne(clk_out, rst);
 				end else begin
-					sendZero(clk, rst);
+					sendZero(clk_out, rst);
 				end
 			end else if (counter == 3) begin
 				counter <= counter + 1;
 				if(sr[3]) begin
-					sendOne(clk, rst);
+					sendOne(clk_out, rst);
 				end else begin
-					sendZero(clk, rst);
+					sendZero(clk_out, rst);
 				end
 			end else if (counter == 4) begin
 				counter <= counter + 1;
 				if(sr[4]) begin
-					sendOne(clk, rst);
+					sendOne(clk_out, rst);
 				end else begin
-					sendZero(clk, rst);
+					sendZero(clk_out, rst);
 				end
 			end else if (counter == 5) begin
 				counter <= counter + 1;
 				if(sr[5]) begin
-					sendOne(clk, rst);
+					sendOne(clk_out, rst);
 				end else begin
-					sendZero(clk, rst);
+					sendZero(clk_out, rst);
 				end
 			end else if (counter == 6) begin
 				counter <= counter + 1;
 				if(sr[6]) begin
-					sendOne(clk, rst);
+					sendOne(clk_out, rst);
 				end else begin
-					sendZero(clk, rst);
+					sendZero(clk_out, rst);
 				end
 			end else if (counter == 7) begin
 				counter <= 0;
 				if(sr[7]) begin
-					sendOne(clk, rst);
+					sendOne(clk_out, rst);
 				end else begin
-					sendZero(clk, rst);
+					sendZero(clk_out, rst);
 				end
 			end
 			
@@ -120,13 +120,13 @@ module outputSPI (in, rst, clk, out, en_out, clk_out);
 	end
 
 task sendOne;
-input clk;
-input rst;
+input clk_one;
+input rst_one;
 reg clk_one;
 
-always@(posedge clk)
+always@(posedge clk_zero)
 	begin
-	if (~rst)
+		if (~rst_one)
 		clk_one <= 1'b0;
 	else begin
 		clk_one = ~clk_one;
@@ -135,13 +135,13 @@ always@(posedge clk)
 endtask
 
 task sendZero
-input clk;
-input rst;
+input clk_zero;
+input rst_zero;
 reg clk_zero;
 
-always@(posedge clk)
+always@(posedge clk_zero)
 	begin
-	if (~rst)
+	if (~rst_zero)
 		clk_zero <= 1'b0;
 	else begin
 		clk_zero = ~clk_zero
