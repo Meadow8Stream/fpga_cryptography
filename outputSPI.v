@@ -15,13 +15,14 @@
 `timescale 1 ns / 1 ps
 
 //{module {outputSPI}}
-module outputSPI (in, rst, clk, out, en_out, clk_out);
+module outputSPI (in, rst, clk, out, en_out, clk_out, sent);
 	input [7:0] in;
 	input rst;
 	input clk;
 	output reg out;
 	output reg en_out;
 	output reg clk_out;
+	output reg sent;
 	
 	// internal variables
 	reg [7:0] sr;					// index 7 = msb	  
@@ -50,7 +51,18 @@ module outputSPI (in, rst, clk, out, en_out, clk_out);
 		
 		else	
 		begin
-			sr <= in;
+			if (counter == 0) begin
+				// if counter == 0, then a byte is not in the process of being sent
+				// thus shift register can take a new value and start a new transmission.
+				sr <= in;
+				
+				// when sent is 0, then outputSPI is transmitting and not accepting
+				// new data to be sent
+				// when sent is 1, then outputSPI has finished transmitting/ready for 
+				// new data to be sent
+				// should connect to hash tables
+				sent <= 1'b0;
+			end
 
 			// send enable
 			en_out <= 1'b1;	
@@ -114,6 +126,8 @@ module outputSPI (in, rst, clk, out, en_out, clk_out);
 				end else begin
 					sendZero;
 				end
+				en_out <= 1'b0;
+				sent <= 1'b1;
 			end
 			
 		end	 
