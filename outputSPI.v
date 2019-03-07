@@ -59,9 +59,13 @@ module outputSPI (in, rst, clk, out, en_out, clk_out);
 			// Implement/Alter to make: sending a 1 is high for one clock cycle, low for one clock cycle
 			//			    sending a 0 is low for one clock cycle, high for one clock cycle.
 			if (counter == 0) begin    
-				out <= sr[0];
 				counter <= counter + 1;
-			end	else if (counter == 1) begin	
+				if (sr[0])
+					sendOne(clk, rst);
+				else
+					sendZero(clk, rst);
+				end
+			end else if (counter == 1) begin	
 				out <= sr[1];
 				counter <= counter + 1;
 			end else if (counter == 2) begin
@@ -70,7 +74,7 @@ module outputSPI (in, rst, clk, out, en_out, clk_out);
 			end else if (counter == 3) begin
 				out <= sr[3];
 				counter <= counter + 1;
-			end	else if (counter == 4) begin
+			end else if (counter == 4) begin
 				out <= sr[4];
 				counter <= counter + 1;
 			end else if (counter == 5) begin
