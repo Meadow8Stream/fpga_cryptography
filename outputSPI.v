@@ -56,6 +56,8 @@ module outputSPI (in, rst, clk, out, en_out, clk_out);
 			en_out <= 1'b1;	
 			
 			// construct signal
+			// Implement/Alter to make: sending a 1 is high for one clock cycle, low for one clock cycle
+			//			    sending a 0 is low for one clock cycle, high for one clock cycle.
 			if (counter == 0) begin    
 				out <= sr[0];
 				counter <= counter + 1;
@@ -85,3 +87,12 @@ module outputSPI (in, rst, clk, out, en_out, clk_out);
 		end	 
 	end
 endmodule
+
+task sendOne;
+input clk;
+	
+endtask
+
+task sendZero
+input clk;	
+endtask
