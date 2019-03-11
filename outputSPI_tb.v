@@ -28,18 +28,22 @@ outputSPI UUT (
 .en_out (en_out)
 .sent (sent)
 );				
-
+initial begin
+	clk <= 1'b0;
+	rst <= 1'b0;
+	in <= 8'b11111111;
+	
 always
 	begin
 	#1 clk = ~clk;
-	#5 rst <= 1'b1;
 	end
 	
-initial
-	begin
-	#1 in <= 8'b00000000;
+always begin
+	for (i = 0; i < 256; i = i + 1) begin
+		in <= in + 8'b00000001;
 	end
-	end
+end
+	
 initial begin
 	$display("\t\ttime,\tclk,\ten,\tin,\tout"); 
 	$monitor("%d,\t%b,\t%b,\t%b,\t%d",$time, clk,en,in,out);
