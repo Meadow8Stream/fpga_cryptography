@@ -4,7 +4,7 @@ For now, please use constants for the prestored data that you may randomly chose
 
 module parse(input clk, input end_of_sequence, input in_data);
   reg[127:0] pdata;
-  reg[127:0] result;
+  output [127:0] result;
 
 //store 16 byte stream
 
