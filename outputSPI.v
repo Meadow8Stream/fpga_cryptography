@@ -32,7 +32,7 @@ module outputSPI (in, rst, clk, out, en_out, clk_out, sent);
 	counter = 0;
 	assign clk_out = clk;
 	
-	always@(posedge clk, rst)
+	always@(posedge clk)
 	begin
 		clk_out <= clk;
 		
