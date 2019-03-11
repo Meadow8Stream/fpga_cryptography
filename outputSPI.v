@@ -26,7 +26,6 @@ module outputSPI (in, rst, clk, out, en_out, clk_out, sent);
 	
 	// internal variables
 	reg [7:0] sr;					// index 7 = msb	  
-	integer i;
 	integer counter;
 	
 	// initialize variables
@@ -41,7 +40,7 @@ module outputSPI (in, rst, clk, out, en_out, clk_out, sent);
 		out <= 1'b0;
 		sr <= 8'b00000000;
 		
-		if (~rst) 
+		if (rst) 
 		begin
 			counter <= 1'b0;
 			out <= 1'b0;   
@@ -134,29 +133,39 @@ module outputSPI (in, rst, clk, out, en_out, clk_out, sent);
 	end
 
 task sendOne;
-	reg clk_one;
-
-	always@(posedge clk_out)
+	integer i;
+	
+	always@(posedge clk)
 	begin
-		if (~rst)
-			clk_one <= 1'b0;
-		else begin
-			clk_one = ~clk_one;
-			out <= clk_one;
+		if (~rst) begin
+			for (i = 0; i<3; i=i+i) begin
+				if (i == 0) begin
+					out <= 1'b1;
+				end else if (i == 1) begin
+					out <= 1'b0;
+				end else if (i == 2) begin
+					out <= 1'b0;
+				end
+			end
 		end
 	end
 endtask
 
 task sendZero
-	reg clk_zero;
+	integer i;
 
-	always@(posedge clk_out)
+	always@(posedge clk)
 	begin
-		if (~rst)
-			clk_zero <= 1'b0;
-		else begin
-			clk_zero = ~clk_zero
-			out <= ~clk_zero;
+		if (~rst) begin
+			for (i = 0; i<3; i=i+i) begin
+				if (i == 0) begin
+					out <= 1'b1;
+				end else if (i == 1) begin
+					out <= 1'b1;
+				end else if (i == 2) begin
+					out <= 1'b0;
+				end
+			end
 		end
 	end
 endtask
