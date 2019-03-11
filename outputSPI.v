@@ -67,8 +67,7 @@ module outputSPI (in, rst, clk, out, en_out, clk_out, sent);
 			en_out <= 1'b1;	
 			
 			// construct signal
-			// Implement/Alter to make: sending a 1 is high for one clock cycle, low for one clock cycle
-			//			    sending a 0 is low for one clock cycle, high for one clock cycle.
+			// Basically calling the correct send task to put the proper bit on the SPI line
 			if (counter == 0) begin    
 				counter <= counter + 1;
 				if (sr[0]) begin
@@ -138,6 +137,7 @@ task sendOne;
 	always@(posedge clk)
 	begin
 		if (~rst) begin
+			// for three clock cycles, send the signal indicating 1: high low low
 			for (i = 0; i<3; i=i+i) begin
 				if (i == 0) begin
 					out <= 1'b1;
@@ -157,6 +157,7 @@ task sendZero
 	always@(posedge clk)
 	begin
 		if (~rst) begin
+			// for three clock cycles, send the signal indicating 1: high high low
 			for (i = 0; i<3; i=i+i) begin
 				if (i == 0) begin
 					out <= 1'b1;
