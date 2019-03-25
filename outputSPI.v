@@ -26,11 +26,10 @@ module outputSPI (in, rst, clk, out, en_out, clk_out, sent);
 	
 	// internal variables
 	reg [7:0] sr;					// index 7 = msb	  
-	integer counter;
+	reg [1:0] counter1 = 2'b00;
+	reg [1:0] counter2 = 2'b00;
 	
 	// initialize variables
-	counter = 0;
-	assign clk_out = clk;
 	
 	always@(posedge clk)
 	begin
@@ -41,134 +40,50 @@ module outputSPI (in, rst, clk, out, en_out, clk_out, sent);
 		sr <= 8'b00000000;
 		
 		if (rst) 
-		begin
-			counter <= 1'b0;
-			out <= 1'b0;   
-			en_out <= 1'b0;
-			
-		end
+			begin
+				counter <= 2'b00;
+				out <= 1'b0;   
+				en_out <= 1'b0;
+				sent <= 1'b1;
+			end
 		
 		else	
-		begin
-			if (counter == 0) begin
-				// if counter == 0, then a byte is not in the process of being sent
-				// thus shift register can take a new value and start a new transmission.
-				sr <= in;
-				
-				// when sent is 0, then outputSPI is transmitting and not accepting
-				// new data to be sent
-				// when sent is 1, then outputSPI has finished transmitting/ready for 
-				// new data to be sent
-				// should connect to hash tables
-				sent <= 1'b0;
-			end
-
+		begin  
+			// when sent is 0, then outputSPI is transmitting and not accepting
+			// new data to be sent
+			// when sent is 1, then outputSPI has finished transmitting/ready for 
+			// new data to be sent
+			// should connect to hash tables
+			sent <= 1'b0;  
+			// if counter == 0, then a byte is not in the process of being sent
+			// thus shift register can take a new value and start a new transmission.
+			sr <= in;
 			// send enable
 			en_out <= 1'b1;	
 			
 			// construct signal
 			// Basically calling the correct send task to put the proper bit on the SPI line
-			if (counter == 0) begin    
-				counter <= counter + 1;
-				if (sr[0]) begin
-					sendOne;
-				end else begin
-					sendZero;
+			if(counter1 < 8) begin
+				if(counter2 == 2'b00) begin
+					clk_out <= clk;
+					en_out 	<= 1'b0;
+					out 	<= 1'b1;
+					counter2 <= 2'b01;
+				end else if (counter2 == 2'b01) begin
+					clk_out <= clk;
+					en_out  <= 1'b0;
+					out	<= sr[0];
+					sr 	<= sr >> 1;
+					counter2 <= 2'b10;
+				end else if (counter2 == 2'b10) begin
+					clk_out <= clk;
+					en_out  <= 1'b0;
+					out 	<= 1'b0;
+					counter2 <= 2'b00;
 				end
-			end else if (counter == 1) begin	
-				counter <= counter + 1;
-				if (sr[1]) begin
-					sendOne;
-				end else begin
-					sendZero;
-				end
-			end else if (counter == 2) begin
-				counter <= counter + 1;	
-				if(sr[2]) begin
-					sendOne;
-				end else begin
-					sendZero;
-				end
-			end else if (counter == 3) begin
-				counter <= counter + 1;
-				if(sr[3]) begin
-					sendOne;
-				end else begin
-					sendZero;
-				end
-			end else if (counter == 4) begin
-				counter <= counter + 1;
-				if(sr[4]) begin
-					sendOne;
-				end else begin
-					sendZero;
-				end
-			end else if (counter == 5) begin
-				counter <= counter + 1;
-				if(sr[5]) begin
-					sendOne;
-				end else begin
-					sendZero;
-				end
-			end else if (counter == 6) begin
-				counter <= counter + 1;
-				if(sr[6]) begin
-					sendOne;
-				end else begin
-					sendZero;
-				end
-			end else if (counter == 7) begin
-				counter <= 0;
-				if(sr[7]) begin
-					sendOne;
-				end else begin
-					sendZero;
-				end
-				en_out <= 1'b0;
-				sent <= 1'b1;
-			end
-			
-		end	 
-	end
-
-task sendOne;
-	integer i;
-	
-	always@(posedge clk)
-	begin
-		if (~rst) begin
-			// for three clock cycles, send the signal indicating 1: high low low
-			for (i = 0; i<3; i=i+i) begin
-				if (i == 0) begin
-					out <= 1'b1;
-				end else if (i == 1) begin
-					out <= 1'b1;
-				end else if (i == 2) begin
-					out <= 1'b0;
-				end
+				counter1 <= counter1 + 2'b01;
+			end else begin
+				counter1 <= 2'b00;
 			end
 		end
-	end
-endtask
-
-task sendZero
-	integer i;
-
-	always@(posedge clk)
-	begin
-		if (~rst) begin
-			// for three clock cycles, send the signal indicating 1: high high low
-			for (i = 0; i<3; i=i+i) begin
-				if (i == 0) begin
-					out <= 1'b1;
-				end else if (i == 1) begin
-					out <= 1'b0;
-				end else if (i == 2) begin
-					out <= 1'b0;
-				end
-			end
-		end
-	end
-endtask
-
 endmodule
