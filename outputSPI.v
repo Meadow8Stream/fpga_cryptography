@@ -47,8 +47,7 @@ module outputSPI (in, rst, clk, out, en_out, clk_out, sent);
 				sent <= 1'b1;
 			end
 		
-		else	
-		begin  
+		else begin  
 			// when sent is 0, then outputSPI is transmitting and not accepting
 			// new data to be sent
 			// when sent is 1, then outputSPI has finished transmitting/ready for 
@@ -57,7 +56,9 @@ module outputSPI (in, rst, clk, out, en_out, clk_out, sent);
 			sent <= 1'b0;  
 			// if counter == 0, then a byte is not in the process of being sent
 			// thus shift register can take a new value and start a new transmission.
-			sr <= in;
+			if(counter1 == 2'b00) begin
+				sr <= in;
+			end
 			// send enable
 			en_out <= 1'b1;	
 			
@@ -86,4 +87,5 @@ module outputSPI (in, rst, clk, out, en_out, clk_out, sent);
 				counter1 <= 2'b00;
 			end
 		end
+	end
 endmodule
