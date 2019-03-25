@@ -142,7 +142,7 @@ task sendOne;
 				if (i == 0) begin
 					out <= 1'b1;
 				end else if (i == 1) begin
-					out <= 1'b0;
+					out <= 1'b1;
 				end else if (i == 2) begin
 					out <= 1'b0;
 				end
@@ -162,7 +162,7 @@ task sendZero
 				if (i == 0) begin
 					out <= 1'b1;
 				end else if (i == 1) begin
-					out <= 1'b1;
+					out <= 1'b0;
 				end else if (i == 2) begin
 					out <= 1'b0;
 				end
