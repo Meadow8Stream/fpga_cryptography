@@ -1,0 +1,47 @@
+module fsm(clock, reset, SPIin, info);
+	parameter size = 3;	 
+	input reg[1] SPIin;
+	input clock, reset;
+	output reg[size-1:0] info;
+	
+	
+	parameter enable = 1'b1; //active high
+	parameter IDLE = 1'b0, STATE_1 = 1'b1;	
+	
+	reg [size-1:0] current_state;  
+	reg [size-1:0] next_state;
+	
+	
+	always@(posedge clock, posedge reset) //sequential_process 
+		begin : sequential_process		
+			if (reset == enable) 
+				current_state <= IDLE;
+			else 
+				current_state <= next_state;	
+		end	
+		
+	always@(next_state,current_state) //combinational_process
+	begin : combinational_process
+		if (reset == enable)
+		begin
+			case(current_state)	
+				IDLE:  
+				begin
+					next_state <= STATE_1;	
+				end		
+					
+				STATE_1: 
+				begin	
+					info <= 2'b00;
+					if (SPIin == 1'b0) 
+						info <= 2'b10;
+					else 
+						info <= 2'b01;
+						
+				next_state <= IDLE;
+				end	  	
+				
+			endcase
+		end
+	end	
+endmodule
