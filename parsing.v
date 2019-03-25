@@ -16,7 +16,6 @@ always @(posedge clk) begin
       2'b10 : pdata <={pdata[126:0, 0};
     default:
   endcase 
-  pdata <= {pdata[126:0, in_data};
 end
 
 always @(posedge clk) begin
