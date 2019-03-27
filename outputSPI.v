@@ -5,7 +5,7 @@
 //
 //-----------------------------------------------------------------------------
 // 		
-// Purpose: To take Hash Table output and turn it into an SPI signal
+// Purpose: To send data using an SPI signal
 // Specifics: 
 //	Data line output
 // 	Enable line to say when talking
