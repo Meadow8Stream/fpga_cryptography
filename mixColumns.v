@@ -19,6 +19,29 @@ always@(posedge clk, rst)
 	begin
 		if (~rst) begin
 			// mixing of columns
-			
 		end
-		end	
+	end
+
+task multGFBasic;
+	// I/O + variables
+	input [7:0] a;
+	input [7:0] b;
+	output reg [7:0] p;
+	
+	integer carry;
+	integer count;
+
+	
+	integer p_irr;
+	p_irr <= 8'b00011011;
+	always@(posedge clk) begin
+		if (count == 0) begin
+			p <= 8'b00000000;
+			p_irr <= 8'b00011011;
+		end else if begin
+			// peasant's algorithm
+		end
+	end
+endtask
+	
+endmodule
