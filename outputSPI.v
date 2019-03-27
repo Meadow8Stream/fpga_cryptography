@@ -15,9 +15,10 @@
 `timescale 1 ns / 1 ps
 
 //{module {outputSPI}}
-module outputSPI (in, rst, clk, out, en_out, clk_out, sent);
+module outputSPI (in, rst, en, clk, out, en_out, clk_out, sent);
 	input [7:0] in;
 	input rst;
+	input en;
 	input clk;
 	output reg out;
 	output reg en_out;
@@ -31,20 +32,20 @@ module outputSPI (in, rst, clk, out, en_out, clk_out, sent);
 	
 	// initialize variables
 	
-	always@(posedge clk)
-	begin
-		clk_out <= clk;
-		
+	always@(posedge clk, rst)
+	begin		
 		// pull out down
 		out <= 1'b0;
-		sr <= 8'b00000000;
 		
-		if (rst) 
+		if (en) 
 			begin
-				counter <= 2'b00;
-				out <= 1'b0;   
-				en_out <= 1'b0;
-				sent <= 1'b1;
+				counter1 <= 2'b00;
+				counter2 <= 2'b00;
+				out 	 <= 1'b0;   
+				en_out   <= 1'b0;
+				sent 	 <= 1'b1;  
+				clk_out  <= 1'b0;
+				sr 	 <= 8'b00000000;
 			end
 		
 		else begin  
