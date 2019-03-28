@@ -48,8 +48,7 @@ module hash (
 				control_selector <= 3'b011; //start compression 	
 			end else if (compression_finished) begin
 				control_selector <= 3'b000; //return to IDLE 	
-			end
-				
+			end	
 		end	
 	end
 
@@ -75,9 +74,7 @@ module hash (
 					pad_count <= {8{1'b0}};
 					padding_finished <= 1'b1;
 				end	
-
 			end	
-
 		end	
 	end
 		
