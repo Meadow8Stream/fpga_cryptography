@@ -47,15 +47,15 @@ end
 always
 	begin 
 	if (i < 5) begin
-		in <= in + 8'b00000001;
-		i <= i + 1;
+		#4 in <= in + 8'b00000001;
+		#1 i <= i + 1;
 	end else begin
 		i <= 0;
 	end
 end
 	
 initial begin
-	$display("\t\ttime,\tclk,\trst,\tin,\tout"); 
+	$display("\t\t\t\ttime,\tclk,\trst,\tin,\tout"); 
 	$monitor("%d,\t%b,\t%b,\t%b,\t%d",$time, clk,rst,in,out);
 end
 
