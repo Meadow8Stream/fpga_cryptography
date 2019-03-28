@@ -32,31 +32,31 @@ outputSPI UUT (
 );		
 
 initial 
-	begin
+begin
 	clk = 1'b0;
-	rst = 1'b0;
-	in = 8'b11111111; 
-	i <= 0;
+	rst = 1'b1;
+	en = 1'b1;
+	in = 8'b00000000; 
+	i = 0;
 end
 
 always
-	begin
+begin
 	#1 clk <= ~clk;
+end	
+
+initial
+begin	  
+	#5 rst <= 1'b0;
+	en <= 1'b0;	  
+	in <= 8'b00000001; 	
+	#50 in <= 8'b00000010
 end
 	
-always
-	begin 
-	if (i < 5) begin
-		#4 in <= in + 8'b00000001;
-		#1 i <= i + 1;
-	end else begin
-		i <= 0;
-	end
-end
-	
-initial begin
-	$display("\t\t\t\ttime,\tclk,\trst,\tin,\tout"); 
-	$monitor("%d,\t%b,\t%b,\t%b,\t%d",$time, clk,rst,in,out);
+initial 
+begin
+	$display("\t\ttime,\tclk,\trst,\ten,\tin,\tout"); 
+	$monitor("%d,\t%b,\t%b,\t%b,\t%b,\t%d",$time, clk,rst,en,in,out);
 end
 
 endmodule
