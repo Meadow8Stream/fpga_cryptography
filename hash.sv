@@ -33,17 +33,6 @@ module hash (
 	reg [1:0] select; //to time updating variables correctly
 				 	
 
-				
-		 	
-
-		
- 
-			
-	
-	
-																														  
-	
-	
 
 	always@(posedge clock, reset) 
 	begin : top_level		
@@ -64,11 +53,7 @@ module hash (
 		end	
 	end
 
-
-
-
-
-
+	
 
 	always@(posedge clock, reset)
 	begin : data_padding		
@@ -96,11 +81,8 @@ module hash (
 		end	
 	end
 		
-		
-		
-		
-		
-		
+				
+	
 	always@(posedge clock, reset)
 	begin : pre_processing		
 		if(~reset) begin
@@ -131,14 +113,9 @@ module hash (
 			end
 		end	
 	end 
+			
+		
 	
-		
-		
-		
-		
-		
-		
-		
 	always@(posedge clock, reset)
 	begin : compression_function		
 		if (~reset) begin //active high reset
@@ -227,10 +204,6 @@ module hash (
 		end
 	 end	
 
-
-
-
-
 	
-		
+	
 endmodule
