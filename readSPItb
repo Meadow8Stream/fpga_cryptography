@@ -1,0 +1,29 @@
+`timescale 1 ns / 1 ps
+
+module readSPItb;  
+	reg clock, reset, SPIin;	 // FSM input
+	wire info;	 				 // FSM output
+	
+	readSPI UUT(
+	.clock(clock),
+	.reset(reset),
+	.SPIin(SPIin),
+	.info(info)
+);
+		
+	initial begin 
+		clock = 0;
+		reset = 0;
+		SPIin = 0;	  
+	end	  
+	
+	always
+		#10 clock = ~clock;
+		
+	always 
+		#500 reset = ~reset;
+		
+	always
+		#20 SPIin = ~SPIin;
+		
+endmodule
