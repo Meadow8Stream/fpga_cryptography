@@ -1,0 +1,21 @@
+module readSPI(clock, reset, SPIin, info);
+	parameter size = 3;	 
+	input reg[1] SPIin;
+	input clock, reset;
+	output reg[size-1:0] info;
+	
+	
+	parameter enable = 1'b1; //active high
+	
+	always@(posedge clock, posedge reset) begin
+		if (reset == ~enable) begin	  
+			if (SPIin == 1'b0) 
+				info = 2'b10;
+			else 
+				info = 2'b01;
+		end else begin
+			info = 2'b00;
+		end
+	end
+	 
+endmodule
