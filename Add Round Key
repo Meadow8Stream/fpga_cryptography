@@ -1,2 +1,3 @@
-module addroundkey();
+module addroundkey(roundkey, clk);
+
 end module
