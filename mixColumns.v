@@ -43,17 +43,16 @@ task multGF;
 	
 	reg carry;
 	reg [3:0] count = 4'b0000;
-
 	reg [7:0] p_irr = 8'b00011011;
 	
 	always@(posedge clk) begin
 		if (~rst) begin
 			count <= 4'0000;
 			p <= 8'00000000;
-			return;
 		end else if (gf_en == 1) begin
 			count <= 4'b0000;
 			p <= 8'b00000000;
+			gf_en <= 0;
 		end else if (count < 4'b1000) begin
 			// peasant's algorithm
 		end
