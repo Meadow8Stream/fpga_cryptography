@@ -37,6 +37,11 @@ module outputSPI (in, rst, en, clk, out, en_out, clk_out, sent);
 		
 	always@(posedge clk, rst)
 	begin
+		// when sent is 0, then outputSPI is transmitting and not accepting
+		// new data to be sent
+		// when sent is 1, then outputSPI has finished transmitting/ready for 
+		// new data to be sent
+		sent <= 1'b0;
 		if (rst) begin
 			counter1 <= 4'b0000;
 			counter2 <= 2'b00;
@@ -51,15 +56,9 @@ module outputSPI (in, rst, en, clk, out, en_out, clk_out, sent);
 			en_out   <= 1'b1;
 			sent 	 <= 1'b1; 
 			sr 	 <= 8'b00000000;
-		end else begin  
-			// when sent is 0, then outputSPI is transmitting and not accepting
-			// new data to be sent
-			// when sent is 1, then outputSPI has finished transmitting/ready for 
-			// new data to be sent
-			// should connect to hash tables
-			sent <= 1'b0;  
+		end else begin   
 			// if counter == 0, then a byte is not in the process of being sent
-			// thus shift register can take a new value and start a new transmission.
+			// thus shift register can chamber a new value and start a new transmission.
 			if(counter1 == 2'b00) begin
 				sr <= in;
 			end
@@ -76,8 +75,8 @@ module outputSPI (in, rst, en, clk, out, en_out, clk_out, sent);
 					counter2 <= 2'b01;
 				end else if (counter2 == 2'b01) begin  
 					en_out   <= 1'b0;
-					out		 <= sr[0];
-					sr 		 <= sr >> 1;
+					out	 <= sr[0];
+					sr 	 <= sr >> 1;
 					counter2 <= 2'b10;
 				end else if (counter2 == 2'b10) begin
 					en_out   <= 1'b0;
