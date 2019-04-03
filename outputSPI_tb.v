@@ -36,7 +36,6 @@ begin
 	clk = 1'b0;
 	rst = 1'b1;
 	en = 1'b1;
-	in = 8'b00000000; 
 	i = 0;
 end
 
@@ -52,7 +51,7 @@ begin
 	in <= 8'b00000001; 	
 	#50 in <= 8'b00000010
 end
-	
+
 initial 
 begin
 	$display("\t\ttime,\tclk,\trst,\ten,\tin,\tout"); 
