@@ -51,7 +51,7 @@ task multGF;
 			count <= 4'0000;
 			p <= 8'00000000;
 			return;
-		end else if (gf_en == 1) begin
+		end else if (gf_en) begin
 			count <= 4'b0000;
 			p <= 8'b00000000;
 			gf_en <= 0;
