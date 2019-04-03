@@ -22,12 +22,12 @@ integer count;
 	
 always@(posedge clk, rst)
 	begin
-		if(~rst) begin
+		if(rst) begin
 			count  <= 0;
 			en_out <= 1'b1;
 			// go-to next state;
 		end else begin
-			if (count == 1'b0) begin
+			if (count == 0) begin
 				sr <= in;
 			end
 			if (encdec) begin
@@ -40,14 +40,14 @@ always@(posedge clk, rst)
 					shiftRows(clk, rst, in, out);
 					mixColumns(clk, rst, in, out);
 					addRoundKey(clk, rst, in, out);
-					count <= count + 1'b1;
+					count <= count + 1;
 				end else if (count == 13) begin
 					subBytes(clk, rst, in, out);
 					shiftRows(clk, rst, in, out);
 					addRoundKey(clk, rst, in, key[count], out);
-					count <= 1'b0;
+					count <= 0;
 				end else begin
-					count <= 1'b0;
+					count <= 0;
 					sr <= in;
 				end
 			end else 
@@ -60,14 +60,14 @@ always@(posedge clk, rst)
 					inShiftRows(clk, rst, in, out);
 					invMixColumns(clk, rst, in, out);
 					invAddRoundKey(clk, rst, in, out);
-					count <= count + 1'b1;
+					count <= count + 1;
 				end else if (count == 13) begin
 					invSubBytes(clk, rst, in, out);
 					invShiftRows(clk, rst, in, out);
-					invAddRoundKey(clk, rst, in, key[15-count], out);
-					count <= 1'b0;
+					invAddRoundKey(clk, rst, in, key[15 - count], out);
+					count <= 0;
 				end else begin
-					count <= 1'b0;
+					count <= 0;
 					sr <= in;
 			end	
 		end
