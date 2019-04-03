@@ -23,10 +23,10 @@ always@(posedge clk, rst)
 			// row 1 calculations:
 			// two times the current byte + three times the byte to the right +
 			// two bytes to the right + three bytes to the right
-			out[0] <= multGF(two_GF, in[0]) ^ multGF(three_GF, in[1]) ^ in[2] ^ in[3];
-			out[1] <= multGF(two_GF, in[1]) ^ multGF(three_GF, in[1]) ^ in[2] ^ in[3];
-			out[2] <= multGF(two_GF, in[2]) ^ multGF(three_GF, in[1]) ^ in[2] ^ in[3];
-			out[3] <= multGF(two_GF, in[3]) ^ multGF(three_GF, in[1]) ^ in[2] ^ in[3];
+			out[0] <= multGF(two_GF, in[0], rst, 1) ^ multGF(three_GF, in[1], rst, 1) ^ in[2] ^ in[3];
+			out[1] <= multGF(two_GF, in[1], rst, 1) ^ multGF(three_GF, in[1], rst, 1) ^ in[2] ^ in[3];
+			out[2] <= multGF(two_GF, in[2], rst, 1) ^ multGF(three_GF, in[1], rst, 1) ^ in[2] ^ in[3];
+			out[3] <= multGF(two_GF, in[3], rst, 1) ^ multGF(three_GF, in[1], rst, 1) ^ in[2] ^ in[3];
 			
 			// row 2 calculations:
 			//
@@ -36,19 +36,21 @@ always@(posedge clk, rst)
 
 task multGF;
 	// I/O + variables
-	input rst, gf_en;
 	input [7:0] a;
 	input [7:0] b;
+	input rst;
+	input gf_en;
 	output reg [7:0] p;
 	
 	reg carry;
 	reg [3:0] count = 4'b0000;
-	reg [7:0] p_irr = 8'b00011011;
+	reg [4:0] p_irr = 8'b11011;
 	
 	always@(posedge clk) begin
-		if (~rst) begin
+		if (rst) begin
 			count <= 4'0000;
 			p <= 8'00000000;
+			return;
 		end else if (gf_en == 1) begin
 			count <= 4'b0000;
 			p <= 8'b00000000;
