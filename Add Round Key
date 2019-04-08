@@ -1,18 +1,41 @@
-module addroundkey(roundkey, clk);
+module addroundkey(roundkey, clk, w, k, in);
 
 //10 rounds for 128bits
 
-//w[i+4]=w[i]^g(w[i+3])
-//w[i+5]=w[i+4]^w[i+1]
-//w[i+6]=w[i+5]^w[i+2]
-//w[i+7]=w[i+6]^w[i+3]
+reg [0:15]w [0:43];
+reg [0:7]k [0:127];
+input [0:127]in;
+
+k[0]=in[0:7];
+for(i=1;i<=15;i=i+1)
+  begin
+   k[i]=in[i*8:((i+1)*8)-1)];
+  end
+  
+w[0]=
+w[1]=
+w[2]=
+w[3]=
+
 
 //g function
 //one-byte left circular rotation on 4 byte word
 //byte substition from s box
+RijndaelSBox inst_1(a,c);
+
 //xor with round constant (RC[i],0x00,0x00,0x00)
 //                      RC[1]=0x01
 //                      RC[j]=0x02 X RC[j-1]
+
+
+
+for(i=1;1<=10:i=i+1)
+  begin
+    w[i*4]=w[(i*4)-4]^g(w[(i*4)-1]);
+    w[(i*4)+1]=w[(i*4)]^w[(i*4)-3];
+    w[(i*4)+2]=w[(i*4)+1]^w[(i*4)-2];
+    w[(i*4)+3]=w[(i*4)+2]^w[(i*4)-1];
+  end
 
 end module
 
