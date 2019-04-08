@@ -56,7 +56,19 @@ task multGF;
 			p <= 8'b00000000;
 			gf_en <= 0;
 		end else if (count < 4'b1000) begin
-			// peasant's algorithm
+			if(b[0]) begin
+				p <= p ^b;
+			end
+			b <= b >> 1;
+			carry <= a[0];
+			a <= a << 1;
+			
+			if(carry) begin
+				a <= a ^ p_irr;
+			end
+			count <= count + 1;
+		end else begin
+			count <= 0;
 		end
 	end
 endtask
