@@ -1,11 +1,11 @@
-module addroundkey(roundkey, clk, k, Key, state, rc);
+module addroundkey(out,Key, state, rc);
 
-reg [31:0] w0,w1,w2,w3,wshift;
-
-input [127:0]Key;
+reg [31:0] w0,w1,w2,w3,wshift,gw,tem;
+reg [127:0] RoundKey;
+input [127:0] Key, state;
 input [3:0] rc;
-output roundkey;
-wire[31:0] tem;
+output [127:0]out;
+
 
    assign w0 = Key[31:0];
    assign w1 = Key[63:32];
@@ -22,6 +22,19 @@ RijndaelSBox inst_1(.a(wshift[15:8]),.c(tem[15:8]));
 RijndaelSBox inst_1(.a(wshift[7:0]),.c(tem[7:0]));
 
 //xor with round constant
+  gw = tem^rcon(rc);
+  
+  
+assign RoundKey[127:96] = w0^gw;
+assign RoundKey[95:64]= w0^w1^gw;
+assign RoundKey[63:32]= wo^w1^w2^gw;
+assign RoundKey[31:0]= w0^w1^w2^w3^gw;
+
+
+//Add Round Key
+assign out = state^RoundKey;
+
+
 function [31:0]	rcon;
       input	[3:0]	rc;
       case(rc)	
