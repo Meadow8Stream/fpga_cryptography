@@ -1,33 +1,50 @@
-module addroundkey(roundkey, clk, w, k, in);
-
-
+module addroundkey(roundkey, clk, w, k, Key, state);
 
 reg [0:15]w [0:43];
 reg [0:7]k [0:127];
-input [0:127]in;
+input [0:127]Key;
+output roundkey;
+wire[31:0] tem;
 
-k[0]=in[0:7];
-for(i=1;i<=15;i=i+1)
+always@(in)
   begin
-   k[i]=in[i*8:((i+1)*8)-1)];
-  end
+    k[0]=in[0:7];
+    
+    for(i=1;i<=15;i=i+1)
+      begin
+        k[i]=in[i*8:((i+1)*8)-1)];
+      end
   
-w[0]=k[0:3];
-w[1]=k[4:7];
-w[2]=k[8:11];
-w[3]=k[12:15];
-
+    w[0]=k[0:3];
+    w[1]=k[4:7];
+    w[2]=k[8:11];
+    w[3]=k[12:15];
+end
 
 
 //one-byte left circular rotation on 4 byte word (w[(i*4)-1],
 
 //byte substition from s box
-RijndaelSBox inst_1(a,c);
+RijndaelSBox inst_1(.a(w[3],.c(tem[])));
 
-//xor with round constant (RC[i],0x00,0x00,0x00)
-//                      RC[1]=0x01
-//                      RC[j]=0x02 X RC[j-1]
+//xor with round constant
+function [31:0]	rcon;
+      input	[3:0]	rc;
+      case(rc)	
+         4'h0: rcon=32'h01_00_00_00;
+         4'h1: rcon=32'h02_00_00_00;
+         4'h2: rcon=32'h04_00_00_00;
+         4'h3: rcon=32'h08_00_00_00;
+         4'h4: rcon=32'h10_00_00_00;
+         4'h5: rcon=32'h20_00_00_00;
+         4'h6: rcon=32'h40_00_00_00;
+         4'h7: rcon=32'h80_00_00_00;
+         4'h8: rcon=32'h1b_00_00_00;
+         4'h9: rcon=32'h36_00_00_00;
+         default: rcon=32'h00_00_00_00;
+       endcase
 
+     endfunction
 
 
 for(i=1;1<=10:i=i+1)                  //10 rounds for 128bits
