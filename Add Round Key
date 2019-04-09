@@ -1,10 +1,12 @@
-module addroundkey(out,Key, state, rc);
+    
+module addroundkey(out,Key, state, rc, RoundKey);
 
 //For test use 127'h: Key = 54 68 61 74 73 20 6D 79 20 4B 75 6E 67 20 46 75,   rc=0
 // RoundKey should be E2 32 FC F1 91 12 91 88 B1 59 E4 E6 D6 79 A2 93
 
-reg [31:0] w0,w1,w2,w3,wshift,gw,tem;
-reg [127:0] RoundKey;
+wire [31:0] w0, w1, w2, w3, wshift, gw, tem;
+
+output[127:0] RoundKey;
 input [127:0] Key, state;
 input [3:0] rc;
 output [127:0]out;
@@ -16,28 +18,30 @@ output [127:0]out;
    assign w3 = Key[127:96];
 
 //one-byte left circular rotation on 4 byte word (w[(i*4)-1],
-wshift ={w3[7:0],w3[31:8]};
+  assign wshift = {w3[7:0] , w3[31:8]};
 
 //byte substition from s box
-RijndaelSBox inst_1(.a(wshift[31:24]),.c(tem[31:24]));
-RijndaelSBox inst_2(.a(wshift[23:16]),.c(tem[23:16]));
-RijndaelSBox inst_3(.a(wshift[15:8]),.c(tem[15:8]));
-RijndaelSBox inst_4(.a(wshift[7:0]),.c(tem[7:0]));
+    RijndaelSBox inst_1(.a(wshift[31:24]),.c(tem[31:24]));
+    RijndaelSBox inst_2(.a(wshift[23:16]),.c(tem[23:16]));
+    RijndaelSBox inst_3(.a(wshift[15:8]),.c(tem[15:8]));
+    RijndaelSBox inst_4(.a(wshift[7:0]),.c(tem[7:0]));
 
 //xor with round constant
-  gw = tem^rcon(rc);
+   assign gw = tem ^ rcon(rc);
   
   
-assign RoundKey[127:96] = w0^gw;
-assign RoundKey[95:64]= w0^w1^gw;
-assign RoundKey[63:32]= wo^w1^w2^gw;
-assign RoundKey[31:0]= w0^w1^w2^w3^gw;
+assign RoundKey[127:96] = w0 ^ gw;
+assign RoundKey[95:64]= w0 ^ w1 ^ gw;
+assign RoundKey[63:32]= w0 ^ w1 ^ w2 ^ gw;
+assign RoundKey[31:0]= w0 ^ w1 ^ w2 ^ w3 ^ gw;
 
 
 //Add Round Key
 assign out = state^RoundKey;
 
 
+
+//Function to select round constant based on round number
 function [31:0]	rcon;
       input	[3:0]	rc;
       case(rc)	
@@ -55,10 +59,6 @@ function [31:0]	rcon;
        endcase
 endfunction
 
-
-
-
-end module
-
+endmodule
 
 
