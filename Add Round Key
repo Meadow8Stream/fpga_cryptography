@@ -20,9 +20,9 @@ wshift ={w3[7:0],w3[31:8]};
 
 //byte substition from s box
 RijndaelSBox inst_1(.a(wshift[31:24]),.c(tem[31:24]));
-RijndaelSBox inst_1(.a(wshift[23:16]),.c(tem[23:16]));
-RijndaelSBox inst_1(.a(wshift[15:8]),.c(tem[15:8]));
-RijndaelSBox inst_1(.a(wshift[7:0]),.c(tem[7:0]));
+RijndaelSBox inst_2(.a(wshift[23:16]),.c(tem[23:16]));
+RijndaelSBox inst_3(.a(wshift[15:8]),.c(tem[15:8]));
+RijndaelSBox inst_4(.a(wshift[7:0]),.c(tem[7:0]));
 
 //xor with round constant
   gw = tem^rcon(rc);
