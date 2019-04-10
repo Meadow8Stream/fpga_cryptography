@@ -23,6 +23,5 @@ output [127:0] sbox;
      RijndaelSBox q12(.a(data[31:24]),.b(sbox[31:24]) );
      RijndaelSBox q13(.a(data[23:16]),.b(sbox[23:16]) );
      RijndaelSBox q14(.a(data[15:8]),.b(sbox[15:8]) );
-     RijndaelSBox q16(.a(data[7:0]),.b(sbox[7:0]) );
-	  
+     RijndaelSBox q16(.a(data[7:0]),.b(sbox[7:0]) );	  
 endmodule
