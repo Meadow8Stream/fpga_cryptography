@@ -1,0 +1,28 @@
+															   												`timescale 1ns / 1ps
+
+module inv_subByte(data2,invsbox);
+
+input [127:0] data2;
+output [127:0] invsbox;
+
+     inv_RijndaelSBox q0( .c(data2[127:120]),.d(invsbox[127:120]) );
+     inv_RijndaelSBox q1( .c(data2[119:112]),.d(invsbox[119:112]) );
+     inv_RijndaelSBox q2( .c(data2[111:104]),.d(invsbox[111:104]) );
+     inv_RijndaelSBox q3( .c(data2[103:96]),.d(invsbox[103:96]) );
+     
+     inv_RijndaelSBox q4( .c(data2[95:88]),.d(invsbox[95:88]) );
+     inv_RijndaelSBox q5( .c(data2[87:80]),.d(invsbox[87:80]) );
+     inv_RijndaelSBox q6( .c(data2[79:72]),.d(invsbox[79:72]) );
+     inv_RijndaelSBox q7( .c(data2[71:64]),.d(invsbox[71:64]) );
+     
+     inv_RijndaelSBox q8( .c(data2[63:56]),.d(invsbox[63:56]) );
+     inv_RijndaelSBox q9( .c(data2[55:48]),.d(invsbox[55:48]) );
+     inv_RijndaelSBox q10(.c(data2[47:40]),.d(invsbox[47:40]) );
+     inv_RijndaelSBox q11(.c(data2[39:32]),.d(invsbox[39:32]) );
+     
+     inv_RijndaelSBox q12(.c(data2[31:24]),.d(invsbox[31:24]) );
+     inv_RijndaelSBox q13(.c(data2[23:16]),.d(invsbox[23:16]) );
+     inv_RijndaelSBox q14(.c(data2[15:8]),.d(invsbox[15:8]) );
+     inv_RijndaelSBox q16(.c(data2[7:0]),.d(invsbox[7:0]) );
+	  
+endmodule
