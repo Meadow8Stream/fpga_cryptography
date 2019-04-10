@@ -1,15 +1,16 @@
+    
+module addroundkey(stateout,Key, state, rc, RoundKey, clk,);
 
-module addroundkey(out,Key, state, rc, RoundKey);
-
-//For test use  Key = 127'h 54 68 61 74 73 20 6D 79 20 4B 75 6E 67 20 46 75,   rc=0
+//For test use 127'h: Key = 54 68 61 74 73 20 6D 79 20 4B 75 6E 67 20 46 75,   rc=0
 // RoundKey should be E2 32 FC F1 91 12 91 88 B1 59 E4 E6 D6 79 A2 93
 
-wire [31:0] w0, w1, w2, w3,gw, wshift,tem;
+wire [31:0] w0, w1, w2, w3,gw, wshift, tem;
 
-output[127:0] RoundKey;
+output [127:0] RoundKey;
 input [127:0] Key, state;
 input [3:0] rc;
-output [127:0]out;
+output [127:0]stateout;
+input clk;
 
 
    assign w3 = Key[31:0];
@@ -21,23 +22,22 @@ output [127:0]out;
   assign wshift = {w3[23:0],w3[31:24]};
 
 //byte substition from s box
-    RijndaelSBox inst_1(.a(wshift[31:24]),.c(tem[31:24]));
-    RijndaelSBox inst_2(.a(wshift[23:16]),.c(tem[23:16]));
-    RijndaelSBox inst_3(.a(wshift[15:8]),.c(tem[15:8]));
-    RijndaelSBox inst_4(.a(wshift[7:0]),.c(tem[7:0]));
+    RijndaelSBox inst_1(.a(wshift[31:24]),.b(tem[31:24]));
+    RijndaelSBox inst_2(.a(wshift[23:16]),.b(tem[23:16]));
+    RijndaelSBox inst_3(.a(wshift[15:8]),.b(tem[15:8]));
+    RijndaelSBox inst_4(.a(wshift[7:0]),.b(tem[7:0]));
 
 //xor with round constant
    assign gw = tem ^ rcon(rc);
-  
-  
-assign RoundKey[127:96] = w0 ^ gw;
-assign RoundKey[95:64]= w0 ^ w1 ^ gw;
-assign RoundKey[63:32]= w0 ^ w1 ^ w2 ^ gw;
-assign RoundKey[31:0]= w0 ^ w1 ^ w2 ^ w3 ^ gw;
 
+  
+ assign RoundKey[127:96] = w0 ^ gw;
+ assign RoundKey[95:64]= w0 ^ w1 ^ gw;
+ assign RoundKey[63:32]= w0 ^ w1 ^ w2 ^ gw;
+ assign RoundKey[31:0]= w0 ^ w1 ^ w2 ^ w3 ^ gw;
 
 //Add Round Key
-assign out = state^RoundKey;
+assign stateout = state^Key;
 
 
 
@@ -60,4 +60,5 @@ function [31:0]	rcon;
 endfunction
 
 endmodule
+
 
