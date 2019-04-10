@@ -23,6 +23,5 @@ output [127:0] invsbox;
      inv_RijndaelSBox q12(.c(data2[31:24]),.d(invsbox[31:24]) );
      inv_RijndaelSBox q13(.c(data2[23:16]),.d(invsbox[23:16]) );
      inv_RijndaelSBox q14(.c(data2[15:8]),.d(invsbox[15:8]) );
-     inv_RijndaelSBox q16(.c(data2[7:0]),.d(invsbox[7:0]) );
-	  
+     inv_RijndaelSBox q16(.c(data2[7:0]),.d(invsbox[7:0]) );	  
 endmodule
