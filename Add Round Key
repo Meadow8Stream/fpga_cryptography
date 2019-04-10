@@ -1,10 +1,10 @@
-    
+
 module addroundkey(out,Key, state, rc, RoundKey);
 
-//For test use 127'h: Key = 54 68 61 74 73 20 6D 79 20 4B 75 6E 67 20 46 75,   rc=0
+//For test use  Key = 127'h 54 68 61 74 73 20 6D 79 20 4B 75 6E 67 20 46 75,   rc=0
 // RoundKey should be E2 32 FC F1 91 12 91 88 B1 59 E4 E6 D6 79 A2 93
 
-wire [31:0] w0, w1, w2, w3, wshift, gw, tem;
+wire [31:0] w0, w1, w2, w3,gw, wshift,tem;
 
 output[127:0] RoundKey;
 input [127:0] Key, state;
@@ -12,13 +12,13 @@ input [3:0] rc;
 output [127:0]out;
 
 
-   assign w0 = Key[31:0];
-   assign w1 = Key[63:32];
-   assign w2 = Key[95:64];
-   assign w3 = Key[127:96];
+   assign w3 = Key[31:0];
+   assign w2 = Key[63:32];
+   assign w1 = Key[95:64];
+   assign w0 = Key[127:96];
 
 //one-byte left circular rotation on 4 byte word (w[(i*4)-1],
-  assign wshift = {w3[7:0] , w3[31:8]};
+  assign wshift = {w3[23:0],w3[31:24]};
 
 //byte substition from s box
     RijndaelSBox inst_1(.a(wshift[31:24]),.c(tem[31:24]));
@@ -60,5 +60,4 @@ function [31:0]	rcon;
 endfunction
 
 endmodule
-
 
