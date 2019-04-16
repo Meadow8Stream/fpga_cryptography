@@ -10,8 +10,8 @@ input 	   [7:0] data_in[15:0];			// input represented as 16 bytes
 output reg [7:0] data_out[15:0];			// output represented as 16 bytes
 
 wire[7:0] sr_gf1[15:0];				// will hold original input or galois x2 multiplication
-wire[7:0] sr_gf1[15:0];				// will hold galois x2 multiplication
-wire[7:0] sr_gf1[15:0];				// will hold galois x3 multiplication
+wire[7:0] sr_gf2[15:0];				// will hold galois x2 multiplication
+wire[7:0] sr_gf3[15:0];				// will hold galois x3 multiplication
 	
 reg [8:0] loop;
 	
