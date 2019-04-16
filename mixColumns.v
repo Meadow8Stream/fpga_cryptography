@@ -53,5 +53,6 @@ generate
 		assign data_out[count + 2] = sr_gf1[count] ^ sr_gf1[count + 1] ^ sr_gf2[count + 2] ^ sr_gf3[count + 3];
 		assign data_out[count + 3] = sr_gf3[count] ^ sr_gf1[count + 1] ^ sr_gf1[count + 2] ^ sr_gf2[count + 3];	
 	end
+endgenerate
 */
 endmodule
