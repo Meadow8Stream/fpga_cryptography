@@ -29,22 +29,23 @@ always@(posedge clk, rst)
 		end else begin
 			if (count == 0) begin
 				sr <= in;
+				key <= keyExpansion step_key(clk, rst, in, key);
 			end
 			if (encdec) begin
 				// Encryption
 				if(count == 0) begin
-					addRoundKey(clk, rst, in, key[count], out);
+					addRoundKey step4_init(clk, rst, in, key[count], out);
 				end
 				if(count < 13) begin
-					subBytes(clk, rst, in, out);
-					shiftRows(clk, rst, in, out);
-					mixColumns(clk, rst, in, out);
-					addRoundKey(clk, rst, in, out);
+					subBytes step1(clk, rst, in, out);
+					shiftRows step2(clk, rst, in, out);
+					mixColumns step3(clk, rst, in, out);
+					addRoundKey step4(clk, rst, in, out);
 					count <= count + 1;
 				end else if (count == 13) begin
-					subBytes(clk, rst, in, out);
-					shiftRows(clk, rst, in, out);
-					addRoundKey(clk, rst, in, key[count], out);
+					subBytes step1_final(clk, rst, in, out);
+					shiftRows step2_final(clk, rst, in, out);
+					addRoundKey step4_final(clk, rst, in, key[count], out);
 					count <= 0;
 				end else begin
 					count <= 0;
@@ -53,18 +54,18 @@ always@(posedge clk, rst)
 			end else 
 				// Decryption
 				if(count == 0) begin
-					invAddRoundKey(clk, rst, in, key[15 - count], out);
+					invAddRoundKey invstep4_init(clk, rst, in, key[15 - count], out);
 				end
 				if(count < 13) begin
-					invSubBytes(clk, rst, in, out);
-					inShiftRows(clk, rst, in, out);
-					invMixColumns(clk, rst, in, out);
-					invAddRoundKey(clk, rst, in, out);
+					invSubBytes invstep1(clk, rst, in, out);
+					inShiftRows invstep2(clk, rst, in, out);
+					invMixColumns invstep3(clk, rst, in, out);
+					invAddRoundKey invstep4(clk, rst, in, out);
 					count <= count + 1;
 				end else if (count == 13) begin
-					invSubBytes(clk, rst, in, out);
-					invShiftRows(clk, rst, in, out);
-					invAddRoundKey(clk, rst, in, key[15 - count], out);
+					invSubBytes invstep1_final(clk, rst, in, out);
+					invShiftRows invstep2_final(clk, rst, in, out);
+					invAddRoundKey invstep4_final(clk, rst, in, key[15 - count], out);
 					count <= 0;
 				end else begin
 					count <= 0;
