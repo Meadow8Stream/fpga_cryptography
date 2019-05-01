@@ -18,16 +18,17 @@ reg [8:0] loop;
 	
 generate
 	for (loop = 0; loop <= 15; loop = loop + 1) begin
+		\\ generate galois field multiplication arrays
 		assign sr_gf1[loop] = data_in[loop];
 		assign sr_gf2[loop] = data_in[0][7] ? ((data_in[loop] << 1) ^ 8'h1b) : (data_in[loop] << 1);
-		assign sr_gf9[loop] = 
-		assign sr_gfb[loop] = 
-		assign sr_gfd[loop] = 
-		assign sr_gfe[loop] = 
+		assign sr_gf9[loop] = sr_gf2[loop] ^ sr_gf1[loop] ^ (sr_gf2[loop] << 1);
+		assign sr_gfb[loop] = sr_gf9[loop] << 1;
+		assign sr_gfd[loop] = sr_gfb[loop] ^ sr_gf1[loop];
+		assign sr_gfe[loop] = sr_gfd[loop] ^ (sr_gf2[loop] << 1)
 	end
 endgenerate	
 	
-// to-do: convert to inv setup
+// final assigns
 assign data_out[0] = sr_gf9[0] ^ sr_gfb[1] ^ sr_gfd[2] ^ sr_gfe[3];
 assign data_out[1] = sr_gf1[0] ^ sr_gf2[1] ^ sr_gf3[2] ^ sr_gf1[3];
 assign data_out[2] = sr_gf1[0] ^ sr_gf1[1] ^ sr_gf2[2] ^ sr_gf3[3];
